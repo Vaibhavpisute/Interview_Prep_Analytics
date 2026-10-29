@@ -61,9 +61,9 @@ def ci() -> None:
         browser = p.chromium.launch(channel="chrome", headless=True)
         page = browser.new_page(viewport={"width": 1300, "height": 900}, color_scheme="light")
         page.goto(f"{REPO_URL}/actions/workflows/ci.yml")
-        page.wait_for_selector("[data-testid='workflow-runs-list'], .Box-row", timeout=60000)
-        page.wait_for_timeout(2500)
-        page.screenshot(path=str(OUT / "ci_green.png"))
+        page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(4000)
+        page.screenshot(path=str(OUT / "ci_green.png"), clip={"x": 0, "y": 0, "width": 1300, "height": 530})
         browser.close()
 
 
