@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+.env
+
+# generated at run time
+data/*.db
+data/rejected/*
+!data/rejected/.gitkeep
+data/generated/
+output/
+.Rhistory
+.Rproj.user/
+r/renv/library/
+r/renv/staging/

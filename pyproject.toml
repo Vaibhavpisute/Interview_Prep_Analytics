@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interview-prep-analytics"
+version = "0.1.0"
+description = "Practice-interview analytics: ETL, LLM scoring, SQL views, anomaly checks and reports."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "sqlalchemy>=2.0",
+    "pandas>=2.2",
+    "pydantic>=2.6",
+    "httpx>=0.27",
+    "typer>=0.12",
+    "streamlit>=1.35",
+    "openpyxl>=3.1",
+    "python-dotenv>=1.0",
+    "psycopg[binary]>=3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.5",
+    "matplotlib>=3.8",
+]
+
+[project.scripts]
+ipa = "ipa.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ipa = ["sql/*.sql"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+source = ["ipa"]
+omit = ["*/ipa/dashboard/app.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
