@@ -1,0 +1,5 @@
+Coverage report - pytest --cov=ipa --cov-report=term-missing
+Python 3.12, 2026-10-29. 109 pytest tests: 108 passed, 1 skipped locally.
+The skipped test (Python vs R parity) needs R and runs in the CI 'R analysis' job.
+ipa/dashboard/app.py (thin Streamlit page) is excluded; its data logic is ipa/dashboard/data.py.
+

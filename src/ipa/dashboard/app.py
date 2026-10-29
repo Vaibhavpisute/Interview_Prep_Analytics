@@ -5,6 +5,7 @@ Run:  streamlit run src/ipa/dashboard/app.py
 
 from __future__ import annotations
 
+import altair as alt
 import streamlit as st
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -67,7 +68,16 @@ with right:
     if weak.empty:
         st.info("No scored answers in this selection.")
     else:
-        st.bar_chart(weak.set_index("category")["avg_score"])
+        bars = (
+            alt.Chart(weak)
+            .mark_bar()
+            .encode(
+                x=alt.X("category:N", sort="y", title=None),
+                y=alt.Y("avg_score:Q", title="Average score", scale=alt.Scale(domain=[0, 10])),
+                tooltip=["category", "avg_score", "answers"],
+            )
+        )
+        st.altair_chart(bars, use_container_width=True)
         st.dataframe(weak, hide_index=True, use_container_width=True)
 
 st.subheader("Pace and filler words per week")
