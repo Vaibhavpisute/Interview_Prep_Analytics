@@ -3,3 +3,25 @@ Python 3.12, 2026-10-29. 109 pytest tests: 108 passed, 1 skipped locally.
 The skipped test (Python vs R parity) needs R and runs in the CI 'R analysis' job.
 ipa/dashboard/app.py (thin Streamlit page) is excluded; its data logic is ipa/dashboard/data.py.
 
+Name                        Stmts   Miss  Cover   Missing
+---------------------------------------------------------
+ipa/__init__.py             1      0   100%
+ipa/checks.py              83      0   100%
+ipa/cli.py                107      4    96%   110-112, 138
+ipa/config.py              25      0   100%
+ipa/dashboard/data.py      52      0   100%
+ipa/db.py                  46      1    98%   163
+ipa/demo.py                50      0   100%
+ipa/export.py              17      0   100%
+ipa/ingest.py             158      0   100%
+ipa/llm/client.py         110      0   100%
+ipa/llm/fake.py            82      0   100%
+ipa/llm/prompts.py         40      0   100%
+ipa/llm/providers.py      103      0   100%
+ipa/logging_setup.py        6      0   100%
+ipa/report.py             107      2    98%   49, 51
+ipa/schemas.py             46      0   100%
+ipa/speech.py              53      0   100%
+ipa/workflow.py            73      0   100%
+---------------------------------------------------------
+TOTAL                        1159      7    99%
