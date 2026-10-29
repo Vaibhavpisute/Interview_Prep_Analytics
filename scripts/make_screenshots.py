@@ -63,7 +63,8 @@ def ci() -> None:
         page.goto(f"{REPO_URL}/actions/workflows/ci.yml")
         page.wait_for_load_state("networkidle")
         page.wait_for_timeout(4000)
-        page.screenshot(path=str(OUT / "ci_green.png"), clip={"x": 0, "y": 0, "width": 1300, "height": 530})
+        clip = {"x": 0, "y": 0, "width": 1300, "height": 530}
+        page.screenshot(path=str(OUT / "ci_green.png"), clip=clip)
         browser.close()
 
 
