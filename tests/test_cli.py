@@ -88,3 +88,8 @@ def test_demo_runs_end_to_end_with_the_fake_llm(env):
     assert "96 answers loaded" in out and "16 anomalies" in out
     assert (env / "out" / "weekly_report.xlsx").exists()
     assert (env / "out" / "export" / "fact_answers.csv").exists()
+
+
+def test_export_on_empty_database_explains_the_demo_database(env):
+    result = runner.invoke(app, ["export", "--out-dir", str(env / "csv")])
+    assert result.exit_code == 1 and "demo.db" in result.output

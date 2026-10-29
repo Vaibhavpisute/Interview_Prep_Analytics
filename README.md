@@ -111,6 +111,17 @@ ipa export                                   # CSV files for the R analysis
 copy it to `data/raw/` and run `ipa ingest`. Add `--provider fake` to any LLM command to stay
 offline.
 
+### Run the R analysis
+
+```bash
+ipa demo --reset
+DATABASE_URL=sqlite:///data/demo.db ipa export     # PowerShell: $env:DATABASE_URL=...
+Rscript -e "renv::restore()"                       # first time only
+Rscript r/anomaly_stats.R                          # output/r_anomalies.csv + docs/r_charts/
+```
+
+A 30-minute walk through the code is in [docs/STUDY_GUIDE.md](docs/STUDY_GUIDE.md).
+
 ### Use PostgreSQL instead of SQLite
 
 ```bash
@@ -187,7 +198,7 @@ pytest --cov=ipa --cov-report=term-missing    # or: make test
 ruff check . && ruff format --check .         # or: make lint
 ```
 
-- **109 pytest tests** (108 run in the Python jobs, 1 Python-vs-R parity test runs in the R job)
+- **110 pytest tests** (109 run in the Python jobs, 1 Python-vs-R parity test runs in the R job)
   and **5 testthat tests** in `r/tests/`.
 - **99% line coverage** of the `ipa` package (the full report is in
   [docs/coverage.txt](docs/coverage.txt); CI fails below 80%). The thin Streamlit page

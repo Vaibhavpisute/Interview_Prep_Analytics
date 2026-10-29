@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 
 import typer
+from pandas.errors import DatabaseError
 from rich.console import Console
 from rich.table import Table
 from sqlalchemy.engine import Engine
@@ -171,7 +172,14 @@ def export_cmd(
     out_dir: Path = typer.Option(Path("output/export"), help="Folder for the CSV files."),
 ) -> None:
     """Export the fact and dimension tables to CSV (for the R analysis)."""
-    paths = export.export_csv(_engine(load_settings()), out_dir)
+    try:
+        paths = export.export_csv(_engine(load_settings()), out_dir)
+    except DatabaseError:
+        _fail(
+            "The tables were not found. Check DATABASE_URL: `ipa demo` uses "
+            "sqlite:///data/demo.db, so run `DATABASE_URL=sqlite:///data/demo.db ipa export`."
+        )
+        return
     console.print(f"Exported {len(paths)} tables to {out_dir}")
 
 

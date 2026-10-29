@@ -1,13 +1,13 @@
 Coverage report - pytest --cov=ipa --cov-report=term-missing
-Python 3.12, 2026-10-29. 109 pytest tests: 108 passed, 1 skipped locally.
-The skipped test (Python vs R parity) needs R and runs in the CI 'R analysis' job.
+Python 3.12, 2026-10-29. 110 pytest tests: 109 passed, 1 skipped when R is not on PATH.
+The skipped test (Python vs R parity) passes with R installed and runs in the CI 'R analysis' job.
 ipa/dashboard/app.py (thin Streamlit page) is excluded; its data logic is ipa/dashboard/data.py.
 
 Name                        Stmts   Miss  Cover   Missing
 ---------------------------------------------------------
 ipa/__init__.py             1      0   100%
 ipa/checks.py              83      0   100%
-ipa/cli.py                107      4    96%   110-112, 138
+ipa/cli.py                112      5    96%   111-113, 139, 182
 ipa/config.py              25      0   100%
 ipa/dashboard/data.py      52      0   100%
 ipa/db.py                  46      1    98%   163
@@ -24,4 +24,4 @@ ipa/schemas.py             46      0   100%
 ipa/speech.py              53      0   100%
 ipa/workflow.py            73      0   100%
 ---------------------------------------------------------
-TOTAL                        1159      7    99%
+TOTAL                        1164      8    99%
