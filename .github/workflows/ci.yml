@@ -27,8 +27,8 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
           cache: pip
@@ -50,7 +50,7 @@ jobs:
         run: ipa demo --reset --db postgresql+psycopg://ipa:ipa@localhost:5432/ipa
       - name: Upload coverage and sample report
         if: matrix.python == '3.11'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-and-report
           path: |
@@ -61,6 +61,69 @@ jobs:
     name: Docker compose demo
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: docker compose up runs the demo
         run: docker compose up --build --exit-code-from app --abort-on-container-exit
+
+  r:
+    name: R analysis (testthat, script, Python/R parity)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ipa
+          POSTGRES_PASSWORD: ipa
+          POSTGRES_DB: ipa
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ipa -d ipa"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install Python package
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -e .
+      - name: Demo on PostgreSQL (also writes the CSV exports for R)
+        run: ipa demo --reset --db postgresql+psycopg://ipa:ipa@localhost:5432/ipa
+      - name: System libraries for R packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libcurl4-openssl-dev libssl-dev libfontconfig1-dev             libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-renv@v2
+      - name: R script on CSV exports
+        run: Rscript r/anomaly_stats.R
+      - name: R script on PostgreSQL (DBI + RPostgres) gives the same answer
+        env:
+          IPA_PG_HOST: localhost
+          IPA_R_OUT: output/r_anomalies_pg.csv
+          IPA_R_CHARTS: output/r_charts_pg
+        run: |
+          Rscript r/anomaly_stats.R
+          diff output/r_anomalies.csv output/r_anomalies_pg.csv
+      - name: testthat tests (includes Python/R parity)
+        env:
+          IPA_REQUIRE_PARITY: "1"
+        run: Rscript r/tests/testthat.R
+      - name: pytest parity test (must not be skipped)
+        env:
+          IPA_REQUIRE_R: "1"
+        run: pytest tests/test_r_parity.py -rA
+      - uses: actions/upload-artifact@v7
+        with:
+          name: r-outputs
+          path: |
+            output/r_anomalies.csv
+            docs/r_charts

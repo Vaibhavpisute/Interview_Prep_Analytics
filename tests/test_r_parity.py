@@ -33,8 +33,11 @@ def _r_ready() -> bool:
     return probe.returncode == 0
 
 
-@pytest.mark.skipif(not _r_ready(), reason="Rscript or R packages not available")
 def test_python_and_r_flag_the_same_sessions(loaded_engine, tmp_path):
+    if not _r_ready():
+        if os.environ.get("IPA_REQUIRE_R"):
+            pytest.fail("IPA_REQUIRE_R is set but Rscript or the R packages are missing")
+        pytest.skip("Rscript or R packages not available")
     score_pending(loaded_engine, LLMClient(FakeProvider(), sleep=lambda s: None, max_retries=3))
     run_checks(loaded_engine)
     export_csv(loaded_engine, tmp_path / "export")

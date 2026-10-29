@@ -9,8 +9,8 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.11"
           cache: pip
@@ -25,7 +25,7 @@ jobs:
         env:
           DATABASE_URL: sqlite:///data/demo.db
         run: ipa weekly-report --out output/weekly_report.xlsx
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: weekly-report
           path: output/weekly_report.xlsx
