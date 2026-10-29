@@ -1,0 +1,20 @@
+Job title: Data Engineer (made-up sample job description)
+
+About the role
+We are a growing analytics team that builds reliable data pipelines for finance and product reporting.
+You will design, build and run batch and streaming pipelines, keep our warehouse trustworthy and
+work closely with analysts and data scientists.
+
+What you will do
+- Build ETL / ELT pipelines in Python and SQL, load them into PostgreSQL and a cloud warehouse.
+- Process large datasets with Apache Spark and tune slow jobs (partitioning, joins, skew).
+- Design star-schema data models with clear fact and dimension tables.
+- Add data quality checks, monitoring and alerts, and fix pipeline failures quickly.
+- Automate reports and write clear documentation.
+
+What we look for
+- 1-3 years of experience as a Data Engineer or similar role.
+- Strong SQL (window functions, query tuning) and Python (pandas, testing).
+- Experience with Spark, orchestration tools such as Airflow, and Git / CI.
+- Good communication: you can explain trade-offs and work with stakeholders.
+- Nice to have: R, dbt, Docker.

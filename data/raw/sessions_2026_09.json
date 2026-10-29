@@ -1,0 +1,146 @@
+[
+  {
+    "session_id": "S026",
+    "session_date": "2026-09-02",
+    "job_title": "Analytics Engineer",
+    "category": "Data Modelling",
+    "question": "What is the difference between a star schema and a snowflake schema?",
+    "answer": "A star schema has a central fact table joined to flat, denormalised dimensions. A snowflake schema splits those dimensions into several related tables. I usually choose the star schema because queries need fewer joins and are easier for analysts to write. For example, a sales model with 5 flat dimensions ran dashboard queries in under 2 seconds. Snowflaking saves some storage and avoids repeated values, but it makes queries slower and more complex.",
+    "duration_sec": 26
+  },
+  {
+    "session_id": "S026",
+    "session_date": "2026-09-02",
+    "job_title": "Analytics Engineer",
+    "category": "ETL",
+    "question": "How would you design incremental loads for a table without a reliable updated-at column?",
+    "answer": "I would compare row hashes between the source and the target. I compute a hash of the business columns, then insert new keys, update changed hashes and flag missing keys. For example, on a 3 million row customer table only about 15 thousand rows changed each day, so the load dropped from 25 to 3 minutes. If the source supports change data capture, I would use that instead.",
+    "duration_sec": 52
+  },
+  {
+    "session_id": "S026",
+    "session_date": "2026-09-02",
+    "job_title": "Analytics Engineer",
+    "category": "Python",
+    "question": "What is the difference between a generator and a list, and when would you use a generator?",
+    "answer": "A list stores all its items in memory, while a generator produces one item at a time. I use a generator when the data is large or when I only need to loop over it once. For example, reading a 5 million line file with a generator used about 30 MB instead of 2 GB. The trade-off is that a generator can be used only once and has no length or index.",
+    "duration_sec": 34
+  },
+  {
+    "session_id": "S027",
+    "session_date": "2026-09-04",
+    "job_title": "Analytics Engineer",
+    "category": "SQL",
+    "question": "Explain the difference between a clustered and a non-clustered index.",
+    "answer": "A clustered index decides the physical order of the rows, so a table can have only one. A non-clustered index is a separate structure that stores the key and a pointer back to the row. For example, an orders table clustered on order date made monthly reports 4 times faster, and a non-clustered index on customer id served the customer lookups. The trade-off is that every extra index slows down inserts and uses more storage.",
+    "duration_sec": 31
+  },
+  {
+    "session_id": "S027",
+    "session_date": "2026-09-04",
+    "job_title": "Analytics Engineer",
+    "category": "ETL",
+    "question": "What data quality checks do you add to a pipeline?",
+    "answer": "I check completeness, uniqueness, validity and freshness. Examples are row counts against the source, not-null and unique keys, allowed value ranges and the latest load time. For example, a check on the order total caught a currency bug that affected 2 percent of rows before the dashboard was updated. Critical checks stop the pipeline and the others raise an alert.",
+    "duration_sec": 26
+  },
+  {
+    "session_id": "S027",
+    "session_date": "2026-09-04",
+    "job_title": "Analytics Engineer",
+    "category": "Spark",
+    "question": "Explain the difference between narrow and wide transformations in Spark.",
+    "answer": "A narrow transformation needs data from only one input partition, like map or filter. A wide transformation needs data from many partitions, like groupBy or join, and causes a shuffle. For example, moving a filter before a join cut the shuffled data from 300 GB to 40 GB. So I try to use narrow steps first and keep the number of wide steps small.",
+    "duration_sec": 26
+  },
+  {
+    "session_id": "S028",
+    "session_date": "2026-09-07",
+    "job_title": "Data Engineer",
+    "category": "ETL",
+    "question": "How do you handle late arriving data in a batch pipeline?",
+    "answer": "I design the pipeline to reprocess a sliding window, not only the latest day. Each run reloads the last 3 days by partition, and the load is idempotent so reprocessing is safe. For example, mobile events arrived up to 36 hours late, and the 3 day window recovered 99.8 percent of them. Anything later goes to a backfill job that I run on demand.",
+    "duration_sec": 27
+  },
+  {
+    "session_id": "S028",
+    "session_date": "2026-09-07",
+    "job_title": "Data Engineer",
+    "category": "ETL",
+    "question": "How do you make an ETL pipeline idempotent?",
+    "answer": "I make sure that running the same load twice gives the same result. I use natural keys or content hashes with an upsert, and I load each batch inside one transaction. For example, after I added a hash key, a rerun of 80 thousand rows created zero duplicates. I also keep a load log, so I know which files were already processed.",
+    "duration_sec": 24
+  },
+  {
+    "session_id": "S028",
+    "session_date": "2026-09-07",
+    "job_title": "Data Engineer",
+    "category": "Spark",
+    "question": "When would you use repartition versus coalesce?",
+    "answer": "I use repartition to increase partitions or to spread data evenly, and coalesce to reduce partitions cheaply. Repartition does a full shuffle, while coalesce merges existing partitions without one. For example, writing 4,000 small files was changed to 64 files of about 128 MB each, and downstream reads became 3 times faster. The trade-off is that coalesce can leave uneven partitions.",
+    "duration_sec": 23
+  },
+  {
+    "session_id": "S029",
+    "session_date": "2026-09-09",
+    "job_title": "Data Engineer",
+    "category": "Data Modelling",
+    "question": "How would you model a slowly changing dimension Type 2?",
+    "answer": "I keep history by adding a new row each time a tracked attribute changes. Each row has a surrogate key, valid from and valid to dates and a current flag. For example, when a customer moved city, old orders still joined to the old city and new orders joined to the new one. The trade-off is a bigger dimension and a more careful load process.",
+    "duration_sec": 33
+  },
+  {
+    "session_id": "S029",
+    "session_date": "2026-09-09",
+    "job_title": "Data Engineer",
+    "category": "ETL",
+    "question": "What data quality checks do you add to a pipeline?",
+    "answer": "I check completeness, uniqueness, validity and freshness. Examples are row counts against the source, not-null and unique keys, allowed value ranges and the latest load time. I send bad rows to a rejected table with the reason, because silent drops hide problems. For example, a check on the order total caught a currency bug that affected 2 percent of rows before the dashboard was updated.",
+    "duration_sec": 27
+  },
+  {
+    "session_id": "S029",
+    "session_date": "2026-09-09",
+    "job_title": "Data Engineer",
+    "category": "Python",
+    "question": "How do you write unit tests for a data transformation function?",
+    "answer": "I keep the function pure so it takes a DataFrame and returns a DataFrame. Then I write small pytest cases with tiny hand-made inputs and the exact expected output. For example, a test with 6 rows caught a bug where nulls were silently dropped in a join. I run the tests in CI on every push so a broken change never reaches production.",
+    "duration_sec": 27
+  },
+  {
+    "session_id": "S030",
+    "session_date": "2026-09-11",
+    "job_title": "Data Engineer",
+    "category": "Behavioural",
+    "question": "Describe a disagreement with a teammate and how you resolved it.",
+    "answer": "A teammate and I disagreed about using a full reload or an incremental load. I listened to the concerns first, then suggested we test both on a copy of the data. For example, the incremental load was 8 times faster, and we agreed to use it with a weekly full check. We stayed on good terms, and the team kept the benchmark script for later decisions.",
+    "duration_sec": 29
+  },
+  {
+    "session_id": "S030",
+    "session_date": "2026-09-11",
+    "job_title": "Data Engineer",
+    "category": "Spark",
+    "question": "How do you choose between a broadcast join and a sort merge join?",
+    "answer": "I use a broadcast join when one side is small enough to fit in executor memory. It avoids shuffling the large table, while a sort merge join shuffles and sorts both sides. For example, broadcasting a 50 MB dimension against a 2 TB fact table cut a job from 35 to 6 minutes. If the small side grows too big, I switch back to sort merge to avoid memory errors.",
+    "duration_sec": 33
+  },
+  {
+    "session_id": "S030",
+    "session_date": "2026-09-11",
+    "job_title": "Data Engineer",
+    "category": "Behavioural",
+    "question": "Tell me about a time you had to learn a new tool quickly.",
+    "answer": "I had to learn dbt in two weeks to take over a reporting project. I read the documentation, built a small model of my own and asked a teammate to review it. For example, by the end of week two I had moved 12 SQL scripts into tested dbt models. I also wrote a short guide so the next person could start faster.",
+    "duration_sec": 33
+  },
+  {
+    "session_id": "S030",
+    "session_date": "2026-09-11",
+    "job_title": "Data Engineer",
+    "category": "Data Modelling",
+    "question": "What is the difference between a star schema and a snowflake schema?",
+    "answer": "A star schema has a central fact table joined to flat, denormalised dimensions. A snowflake schema splits those dimensions into several related tables. For example, a sales model with 5 flat dimensions ran dashboard queries in under 2 seconds. Snowflaking saves some storage and avoids repeated values, but it makes queries slower and more complex.",
+    "duration_sec": 31
+  }
+]
